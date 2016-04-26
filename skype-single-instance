@@ -15,7 +15,7 @@ try:
 
     # 'FOCUS' does not reliably raise the window or give it keyboard focus :-(
     if os.system('which wmctrl') == 0:
-        os.system(u'wmctrl -R Skype\N{TRADE MARK SIGN}'.encode('utf-8'))
+        os.system(u'wmctrl -a Skype\N{TRADE MARK SIGN}'.encode('utf-8'))
     else:
         # Fallback: This only partially raises and doesn't seem to focus.
         # It does draw attention to where the covered window is.
