@@ -30,3 +30,8 @@ Here's his original readme:
     the main menu entries... just type the extra 's' (that is, type
     'skypes' instead of just 'skype'), and that should bring up
     skype-single-instance.
+
+Later additions:
+
+- If you have 'wmctrl' installed, the script will aldo raise and focus
+  the skype window.

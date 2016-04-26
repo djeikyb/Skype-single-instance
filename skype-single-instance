@@ -12,6 +12,16 @@ try:
     #out_connection.Invoke('SET WINDOWSTATE MAXIMIZED')
     out_connection.Invoke('SET WINDOWSTATE NORMAL')
     out_connection.Invoke('FOCUS')
+
+    # 'FOCUS' does not reliably raise the window or give it keyboard focus :-(
+    if os.system('which wmctrl') == 0:
+        os.system(u'wmctrl -R Skype\N{TRADE MARK SIGN}'.encode('utf-8'))
+    else:
+        # Fallback: This only partially raises and doesn't seem to focus.
+        # It does draw attention to where the covered window is.
+        out_connection.Invoke('SET WINDOWSTATE HIDDEN')
+        out_connection.Invoke('SET WINDOWSTATE NORMAL')
+
 except:
-    os.system("skype")
+    os.system('skype')
     sys.exit()
