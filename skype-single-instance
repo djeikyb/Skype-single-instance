@@ -1,7 +1,10 @@
 #!/usr/bin/env python
 import dbus
+import subprocess
 import sys
-import os
+import time
+
+MAX_SECONDS_WAITING_TO_APPEAR = 5
 
 try:
     # Try and set skype window to normal
@@ -14,8 +17,15 @@ try:
     out_connection.Invoke('FOCUS')
 
     # 'FOCUS' does not reliably raise the window or give it keyboard focus :-(
-    if os.system('which wmctrl') == 0:
-        os.system(u'wmctrl -a Skype\N{TRADE MARK SIGN}'.encode('utf-8'))
+    if subprocess.call(['which', 'wmctrl'], stdout=subprocess.PIPE) == 0:
+        skype_title_pattern = u'Skype\N{TRADE MARK SIGN}'.encode('utf-8')
+        t0 = time.time()
+        while (skype_title_pattern not in
+               subprocess.check_output(['wmctrl', '-l'])
+               and
+               time.time() < t0 + MAX_SECONDS_WAITING_TO_APPEAR):
+            time.sleep(0.25)
+        subprocess.check_call(['wmctrl', '-a', skype_title_pattern])
     else:
         # Fallback: This only partially raises and doesn't seem to focus.
         # It does draw attention to where the covered window is.
@@ -23,5 +33,5 @@ try:
         out_connection.Invoke('SET WINDOWSTATE NORMAL')
 
 except:
-    os.system('skype')
+    subprocess.call(['skype'])
     sys.exit()
